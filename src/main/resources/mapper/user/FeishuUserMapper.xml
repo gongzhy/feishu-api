@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gongzhy.feishu.api.mapper.user.IFeishuUserMapper">
+    <resultMap id="BaseResultMap" type="com.gongzhy.feishu.api.core.model.user.FeishuUser">
+        <id column="union_id" jdbcType="VARCHAR" property="unionId"/>
+        <result column="real_name" jdbcType="VARCHAR" property="realName"/>
+        <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="client_ip" jdbcType="VARCHAR" property="clientIp"/>
+        <result column="login_date" jdbcType="DATE" property="loginDate"/>
+        <result column="register_date" jdbcType="DATE" property="registerDate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        union_id, real_name, avatar_url, mobile, email, client_ip, login_date, register_date
+    </sql>
+
+    <select id="get" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+          from feishu_user
+         where union_id = #{unionId,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insert" parameterType="com.gongzhy.feishu.api.core.model.user.FeishuUser">
+    insert into feishu_user (union_id, real_name, avatar_url, mobile, email, client_ip, login_date, register_date)
+    values (#{unionId,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR},
+            #{email,jdbcType=VARCHAR}, #{clientIp,jdbcType=VARCHAR}, now(), now())
+    </insert>
+
+    <update id="update" parameterType="com.gongzhy.feishu.api.core.model.user.FeishuUser">
+        <!--@mbg.generated-->
+        update feishu_user
+           set <if test="avatarUrl != null">
+                    avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+               </if>
+               <if test="mobile != null">
+                    mobile = #{mobile,jdbcType=VARCHAR},
+               </if>
+               <if test="email != null">
+                    email = #{email,jdbcType=VARCHAR},
+               </if>
+               client_ip = #{clientIp,jdbcType=VARCHAR},
+               login_date = now()
+         where union_id = #{unionId,jdbcType=VARCHAR}
+    </update>
+</mapper>

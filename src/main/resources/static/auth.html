@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <title>飞书授权</title>
+<body data-genuitec-lp-enabled="false">
+<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="js/pookui.min-1.0.0.js"></script>
+<script type="text/javascript" src="js/requestParam.js"></script>
+<script type="text/javascript" src="js/webkit1.0.js"></script>
+<script type="text/javascript">
+
+    $(window).load(function () {
+        var code = request.QueryString('code');
+        // 通过code授权存入登录状态
+        if (code != null && code != "" && code.length > 0) {
+            var appId = request.QueryString('state');
+            if (appId == null || appId == '' || appId.length == 0) {
+                pookui.error("参数异常appId为空");
+                return;
+            }
+            $.ajax({
+                url: "/api/feishu/auth",
+                cache: false,
+                type: "post",
+                dataType: "json",
+                contentType: "application/json",
+                async: false,
+                data: JSON.stringify({
+                    "code": code,
+                    "appId": appId
+                }),
+                success: function (data) {
+                    if (data.ret == 200) {
+                        window.location.href = data.data.redirectUrl + "?code=" + data.data.authCode;
+                    } else {
+                        pookui.error(data.msg);
+                    }
+                },
+                error: function () {
+                    pookui.error("网络异常");
+                }
+            });
+        } else {
+            var redirectUrl = encodeURIComponent("http://127.0.0.1:9000/auth.html");
+            var appId = request.QueryString('appId');
+            if (appId == null || appId == '' || appId.length == 0) {
+                pookui.error("参数异常appId为空");
+                return;
+            }
+            var getCodeUrl = "https://open.feishu.cn/open-apis/authen/v1/index?redirect_uri=" + redirectUrl + "&app_id=cli_a482c3e40ffbd00d&state=" + appId;
+            window.location.href = getCodeUrl;
+        }
+    });
+
+</script>
+</body>
+</html>

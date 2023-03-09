@@ -1,0 +1,20 @@
+server:
+  port: 9000
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: feishu-api
+  main:
+    allow-bean-definition-overriding: true
+  mvc:
+    static-path-pattern: /**
+
+datasource:
+  file:
+    name: jdbc.properties
+    path: 'classpath:'
+
+logback:
+  level: info
