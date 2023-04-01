@@ -16,7 +16,7 @@ import java.util.Map;
 @AllArgsConstructor
 public enum FeishuApp {
 
-    MARCH("cli_a482c3e40ffbd00d", "5U3ZfeKKL9hqYeTlJDyCCdmGgVBUtkoO");
+    MARCH("cli_a482c3e40ffbd00d", "***************************");
 
     private String appId;
     private String appSecret;
